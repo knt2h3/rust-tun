@@ -162,17 +162,9 @@ impl Device {
         };
 
         device.configure(config)?;
-        device.set_alias(
-            config
-                .address
-                .unwrap_or(IpAddr::V4(Ipv4Addr::new(10, 0, 0, 1))),
-            config
-                .destination
-                .unwrap_or(IpAddr::V4(Ipv4Addr::new(10, 0, 0, 255))),
-            config
-                .netmask
-                .unwrap_or(IpAddr::V4(Ipv4Addr::new(255, 255, 255, 0))),
-        )?;
+        if let (Some(address), Some(destination), Some(netmask)) = (config.address, config.destination, config.netmask) {
+            device.set_alias(address, destination, netmask)?;
+        }
 
         Ok(device)
     }
